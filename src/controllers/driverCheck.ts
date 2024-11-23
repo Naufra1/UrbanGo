@@ -3,14 +3,20 @@ import sqlite3 from "sqlite3";
 
 const path = "./src/config/database.db";
 
-export async function Estimate(distance: number) {
+export async function DriverCheck(driver_id: number) {
   try {
     const db = await open({
       filename: path,
       driver: sqlite3.Database,
     });
 
-    const data = await db.all(`SELECT * FROM driver WHERE km <= ?`, [distance]);
+    const data = await db.all(`SELECT id, name FROM driver WHERE id = ?`, [
+      driver_id,
+    ]);
+
+    if (!data) {
+      return null;
+    }
 
     return data;
   } catch (error) {

@@ -1,33 +1,50 @@
 import { Request, Response, NextFunction } from "express";
 import { errorMsg } from "../error/erroMsg.js";
+import { DriverCheck } from "../controllers/driverCheck.js";
+import { DistanceCheck } from "../controllers/distanceCheck.js";
 
-export default function ValidateEstimate(app: any) {
+export default function ValidateConfirm(app: any) {
   app.use(
     "/ride/confirm",
-    function (req: Request, res: Response, next: NextFunction) {
-      if (!req.body.origin || !req.body.destination || !req.body.customer_id) {
-        console.log("Formulário não foi devidamente preenchido.");
+    async function (req: Request, res: Response, next: NextFunction) {
+      const body = req.body;
+      if (!body.origin || !body.destination || !req.body.customer_id) {
         return res.status(400).send({
           error_code: errorMsg.invalid.code,
           error_description: errorMsg.invalid.description,
         });
       }
-      if (req.body.origin == req.body.destination) {
-        console.log("O endereço de origem não pode ser o mesmo do destino.");
+      if (body.origin == body.destination) {
         return res.status(400).send({
           error_code: errorMsg.invalid.code,
           error_description: errorMsg.invalid.description,
         });
       }
-      // Colocar controller para encontrar motorista
-      if (!req.body.driver.id) {
+      if (
+        typeof body.distance != "number" ||
+        typeof body.driver.id != "number" ||
+        typeof body.value != "number"
+      ) {
+        return res.status(400).send({
+          error_code: errorMsg.invalid.code,
+          error_description: errorMsg.invalid.description,
+        });
+      }
+      const driver = await DriverCheck(body.driver.id);
+
+      if (
+        !body.driver.id ||
+        !driver ||
+        !driver[0] ||
+        driver[0].id != body.driver.id
+      ) {
         return res.status(404).send({
           error_code: errorMsg.driver.code,
           error_description: errorMsg.driver.description,
         });
       }
-      // Colocar controller para checar distancia
-      if (!req.body.distance) {
+      const distance = await DistanceCheck(body.distance);
+      if (!distance || !distance[0] || distance[0].distance < body.distance) {
         return res.status(406).send({
           error_code: errorMsg.distance.code,
           error_description: errorMsg.distance.description,
