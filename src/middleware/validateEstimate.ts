@@ -1,31 +1,33 @@
 import { Request, Response, NextFunction } from "express";
+import { errorMsg } from "../error/erroMsg.js";
 
 export default function ValidateEstimate(app: any) {
   app.use(
     "/ride/estimate",
     function (req: Request, res: Response, next: NextFunction) {
+      const body = req.body
       if (
-        !req.body.origin.latitude ||
-        !req.body.origin.longitude ||
-        !req.body.destination.latitude ||
-        !req.body.destination.longitude ||
-        !req.body.customer_id
+        // !body.origin.latitude ||
+        // !body.origin.longitude ||
+        // !body.destination.latitude ||
+        // !body.destination.longitude ||
+        !body.origin ||
+        !body.destination ||
+        !body.customer_id
       ) {
-        console.log("Formulário não foi devidamente preenchido.");
         return res.status(400).send({
-          error_code: 400,
-          error_description: "Formulário não foi devidamente preenchido.",
+          error_code: errorMsg.invalid.code,
+          error_description: errorMsg.invalid.description,
         });
       }
       if (
-        req.body.origin.latitude == req.body.destination.latitude &&
-        req.body.origin.longitude == req.body.destination.longitude
+        // body.origin.latitude == body.destination.latitude &&
+        // body.origin.longitude == body.destination.longitude
+        body.origin == body.destination
       ) {
-        console.log("O endereço de origem não pode ser o mesmo do destino.");
         return res.status(400).send({
-          error_code: 400,
-          error_description:
-            "O endereço de origem não pode ser o mesmo do destino.",
+          error_code: errorMsg.invalid.code,
+          error_description: errorMsg.invalid.description,
         });
       }
       next();

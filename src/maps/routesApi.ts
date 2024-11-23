@@ -1,3 +1,4 @@
+import { errorMsg } from "../error/erroMsg.js";
 import { GoogleRouteType } from "../routes/rides.js";
 import axios from "axios";
 
@@ -6,20 +7,22 @@ export default async function getRoutesApi(ride: GoogleRouteType) {
   const url = "https://routes.googleapis.com/directions/v2:computeRoutes";
   const payload: GoogleRouteType = {
     origin: {
-      location: {
-        latLng: {
-          latitude: ride.origin.location.latLng.latitude,
-          longitude: ride.origin.location.latLng.longitude,
-        },
-      },
+      // location: {
+      //   latLng: {
+      //     latitude: ride.origin.location.latLng.latitude,
+      //     longitude: ride.origin.location.latLng.longitude,
+      //   },
+      // },
+      address: ride.origin.address,
     },
     destination: {
-      location: {
-        latLng: {
-          latitude: ride.destination.location.latLng.latitude,
-          longitude: ride.destination.location.latLng.longitude,
-        },
-      },
+      // location: {
+      //   latLng: {
+      //     latitude: ride.destination.location.latLng.latitude,
+      //     longitude: ride.destination.location.latLng.longitude,
+      //   },
+      // },
+      address: ride.destination.address,
     },
     travelMode: "DRIVE",
   };
@@ -44,15 +47,13 @@ export default async function getRoutesApi(ride: GoogleRouteType) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
         const statusCode = error.response.status;
-        const statusMsg = error.response.data.error.status;
         const responseData = error.response.data.error.message;
 
         console.error("Erro na requisição:", statusCode, responseData);
 
         return {
-          status: statusCode,
-          code: statusMsg,
-          error_description: responseData,
+          error_code: errorMsg.invalid.code,
+          error_description: errorMsg.invalid.description,
         };
       }
     }

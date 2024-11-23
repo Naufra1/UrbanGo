@@ -95,14 +95,14 @@ export function InitializeDb() {
     // db.run(`INSERT INTO user (name) VALUES (?)`, "Gustavo");
 
     db.run(`CREATE TABLE IF NOT EXISTS driver (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name STRING,
-      description STRING,
-      vehicle STRING,
-      rating NUMBER,
-      comment STRING,
-      value NUMBER,
-      km NUMBER
+      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      name STRING NOT NULL,
+      description STRING NOT NULL,
+      vehicle STRING NOT NULL,
+      rating INTEGER NOT NULL,
+      comment STRING NOT NULL,
+      value REAL NOT NULL,
+      km REAL NOT NULL
     )`);
     drivers.forEach((driver) => {
       db.run(
@@ -120,14 +120,15 @@ export function InitializeDb() {
     });
 
     db.run(`CREATE TABLE IF NOT EXISTS viagem (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      driver_id INTEGER,
-      customer_id INTEGER,
+      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      driver_id INTEGER NOT NULL,
+      customer_id STRING,
       origin STRING NOT NULL,
       destination STRING NOT NULL,
-      distance NUMBER,
-      duration STRING,
-      date DateTime,
+      distance REAL NOT NULL,
+      duration STRING NOT NULL, 
+      date TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
+      value REAL NOT NULL,
       FOREIGN KEY (driver_id) REFERENCES driver (id)
     )`);
   });

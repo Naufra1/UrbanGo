@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import { CheckDatabase, InitializeDb } from "./config/configDb.js";
 import RidesRoutes from "./routes/rides.js";
 import ValidateEstimate from "./middleware/validateEstimate.js";
+import ValidateConfirm from "./middleware/validateConfirm.js";
+import ValidateHistory from "./middleware/validateHistory.js";
 
 const app = express();
 const port = 8080;
@@ -18,8 +20,9 @@ app.use(cors(), express.json());
 
 // Middlewares
 ValidateEstimate(app);
+ValidateConfirm(app);
+ValidateHistory(app)
 //Rotas
-
 RidesRoutes(app);
 
 app.listen(port, () => {

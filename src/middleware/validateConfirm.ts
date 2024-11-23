@@ -1,34 +1,55 @@
 import { Request, Response, NextFunction } from "express";
+import { errorMsg } from "../error/erroMsg.js";
+import { DriverCheck } from "../controllers/driverCheck.js";
+import { DistanceCheck } from "../controllers/distanceCheck.js";
 
 export default function ValidateConfirm(app: any) {
   app.use(
     "/ride/confirm",
-    function (req: Request, res: Response, next: NextFunction) {
-      if (
-        !req.body.origin.latitude ||
-        !req.body.origin.longitude ||
-        !req.body.destination.latitude ||
-        !req.body.destination.longitude ||
-        !req.body.customer_id
-      ) {
-        console.log("Formulário não foi devidamente preenchido.");
+    async function (req: Request, res: Response, next: NextFunction) {
+      const body = req.body;
+      if (!body.origin || !body.destination || !req.body.customer_id) {
         return res.status(400).send({
-          error_code: 400,
-          error_description: "Formulário não foi devidamente preenchido.",
+          error_code: errorMsg.invalid.code,
+          error_description: errorMsg.invalid.description,
+        });
+      }
+      if (body.origin == body.destination) {
+        return res.status(400).send({
+          error_code: errorMsg.invalid.code,
+          error_description: errorMsg.invalid.description,
         });
       }
       if (
-        req.body.origin.latitude == req.body.destination.latitude &&
-        req.body.origin.longitude == req.body.destination.longitude
+        typeof body.distance != "number" ||
+        typeof body.driver.id != "number" ||
+        typeof body.value != "number"
       ) {
-        console.log("O endereço de origem não pode ser o mesmo do destino.");
         return res.status(400).send({
-          error_code: 400,
-          error_description:
-            "O endereço de origem não pode ser o mesmo do destino.",
+          error_code: errorMsg.invalid.code,
+          error_description: errorMsg.invalid.description,
         });
       }
-      // Outras duas validações
+      const driver = await DriverCheck(body.driver.id);
+
+      if (
+        !body.driver.id ||
+        !driver ||
+        !driver[0] ||
+        driver[0].id != body.driver.id
+      ) {
+        return res.status(404).send({
+          error_code: errorMsg.driver.code,
+          error_description: errorMsg.driver.description,
+        });
+      }
+      const distance = await DistanceCheck(body.distance);
+      if (!distance || !distance[0] || distance[0].distance < body.distance) {
+        return res.status(406).send({
+          error_code: errorMsg.distance.code,
+          error_description: errorMsg.distance.description,
+        });
+      }
       next();
     }
   );
