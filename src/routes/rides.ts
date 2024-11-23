@@ -1,23 +1,26 @@
 import { Request, Response } from "express";
 import { Estimate } from "../controllers/ridesController.js";
 import getRoutesApi from "../maps/routesApi.js";
+import { errorMsg } from "../error/erroMsg.js";
 
 export type GoogleRouteType = {
   origin: {
-    location: {
-      latLng: {
-        latitude: number;
-        longitude: number;
-      };
-    };
+    // location: {
+    //   latLng: {
+    //     latitude: number;
+    //     longitude: number;
+    //   };
+    // };
+    address: string;
   };
   destination: {
-    location: {
-      latLng: {
-        latitude: number;
-        longitude: number;
-      };
-    };
+    // location: {
+    //   latLng: {
+    //     latitude: number;
+    //     longitude: number;
+    //   };
+    // };
+    address: string;
   };
   travelMode: string;
 };
@@ -51,20 +54,22 @@ export default function RidesRoutes(app: any): null {
   app.post("/ride/estimate", async (req: Request, res: Response) => {
     const ride: GoogleRouteType = {
       origin: {
-        location: {
-          latLng: {
-            latitude: req.body.origin.latitude,
-            longitude: req.body.origin.longitude,
-          },
-        },
+        // location: {
+        //   latLng: {
+        //     latitude: req.body.origin.latitude,
+        //     longitude: req.body.origin.longitude,
+        //   },
+        // },
+        address: req.body.origin,
       },
       destination: {
-        location: {
-          latLng: {
-            latitude: req.body.destination.latitude,
-            longitude: req.body.destination.longitude,
-          },
-        },
+        // location: {
+        //   latLng: {
+        //     latitude: req.body.destination.latitude,
+        //     longitude: req.body.destination.longitude,
+        //   },
+        // },
+        address: req.body.destination,
       },
       travelMode: "DRIVE",
     };
@@ -74,7 +79,7 @@ export default function RidesRoutes(app: any): null {
 
       if (respRoutesApi?.status == 400) {
         return res.status(400).send({
-          error_code: respRoutesApi.code,
+          error_code: errorMsg.invalid,
           error_description: respRoutesApi.error_description,
         });
       }
@@ -121,11 +126,13 @@ export default function RidesRoutes(app: any): null {
       return res.status(200).send(responseJson);
     } catch (error) {
       console.log("Error na requisição: ", error);
+      return res.status(400).send({
+        error_code: errorMsg.invalid,
+        error_description: "Endereço inválido",
+      });
     }
   });
 
-  app.patch("/ride/confirm", async (req: Request, res: Response) => {
-    
-  });
+  app.patch("/ride/confirm", async (req: Request, res: Response) => {});
   return null;
 }
