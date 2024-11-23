@@ -52,8 +52,8 @@ export default async function getRoutesApi(ride: GoogleRouteType) {
         console.error("Erro na requisição:", statusCode, responseData);
 
         return {
-          error_code: errorMsg.invalid,
-          error_description: responseData,
+          error_code: errorMsg.invalid.code,
+          error_description: errorMsg.invalid.description,
         };
       }
     }

@@ -122,12 +122,13 @@ export function InitializeDb() {
     db.run(`CREATE TABLE IF NOT EXISTS viagem (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       driver_id INTEGER,
-      customer_id INTEGER,
+      customer_id STRING,
       origin STRING NOT NULL,
       destination STRING NOT NULL,
       distance NUMBER,
       duration STRING,
       date DateTime,
+      value number,
       FOREIGN KEY (driver_id) REFERENCES driver (id)
     )`);
   });

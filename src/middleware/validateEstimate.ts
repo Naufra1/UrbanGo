@@ -16,8 +16,8 @@ export default function ValidateEstimate(app: any) {
       ) {
         console.log("Formulário não foi devidamente preenchido.");
         return res.status(400).send({
-          error_code: errorMsg.invalid,
-          error_description: "Formulário não foi devidamente preenchido.",
+          error_code: errorMsg.invalid.code,
+          error_description: errorMsg.invalid.description,
         });
       }
       if (
@@ -27,9 +27,8 @@ export default function ValidateEstimate(app: any) {
       ) {
         console.log("O endereço de origem não pode ser o mesmo do destino.");
         return res.status(400).send({
-          error_code: errorMsg.invalid,
-          error_description:
-            "O endereço de origem não pode ser o mesmo do destino.",
+          error_code: errorMsg.invalid.code,
+          error_description: errorMsg.invalid.description,
         });
       }
       next();

@@ -25,7 +25,7 @@ export type GoogleRouteType = {
   travelMode: string;
 };
 
-type EstimateResponse = {
+type EstimateResponseType = {
   origin: {
     latitude: number;
     longitude: number;
@@ -48,6 +48,17 @@ type EstimateResponse = {
     value: number;
   }[];
   routeResponse: object;
+};
+
+type ConfirmType = {
+  driver_id: number;
+  customer_id: number;
+  origin: string;
+  destination: string;
+  distance: number;
+  duration: string;
+  date: Date;
+  value: number;
 };
 
 export default function RidesRoutes(app: any): null {
@@ -79,8 +90,8 @@ export default function RidesRoutes(app: any): null {
 
       if (respRoutesApi?.status == 400) {
         return res.status(400).send({
-          error_code: errorMsg.invalid,
-          error_description: respRoutesApi.error_description,
+          error_code: errorMsg.invalid.code,
+          error_description: errorMsg.invalid.description,
         });
       }
 
@@ -103,7 +114,7 @@ export default function RidesRoutes(app: any): null {
 
       const sortedDrivers = drivers.sort((a, b) => a.value - b.value);
 
-      const responseJson: EstimateResponse = {
+      const responseJson: EstimateResponseType = {
         origin: {
           latitude:
             respRoutesApi?.data.routes[0].legs[0].startLocation.latLng.latitude,
@@ -127,8 +138,8 @@ export default function RidesRoutes(app: any): null {
     } catch (error) {
       console.log("Error na requisição: ", error);
       return res.status(400).send({
-        error_code: errorMsg.invalid,
-        error_description: "Endereço inválido",
+        error_code: errorMsg.invalid.code,
+        error_description: errorMsg.invalid.description,
       });
     }
   });
