@@ -1,8 +1,7 @@
 import { open } from "sqlite";
 import sqlite3 from "sqlite3";
 import { ConfirmType } from "../routes/rides.js";
-
-const path = "./src/config/database.db";
+import { path } from "../config/configDb.js";
 
 export async function SaveConfirm(confirmBody: ConfirmType) {
   try {

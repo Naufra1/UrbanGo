@@ -1,16 +1,15 @@
 import { open } from "sqlite";
 import sqlite3 from "sqlite3";
+import { path } from "../config/configDb.js";
 
-const path = "./src/config/database.db";
-
-export async function DistanceCheck(driver_id: number) {
+export async function DriverCheck(driver_id: number) {
   try {
     const db = await open({
       filename: path,
       driver: sqlite3.Database,
     });
 
-    const data = await db.all(`SELECT km FROM driver WHERE km <= ?`, [
+    const data = await db.all(`SELECT id, name FROM driver WHERE id = ?`, [
       driver_id,
     ]);
 

@@ -12,7 +12,7 @@ type MotoristaType = {
   km: number;
 };
 
-const path = "./src/config/database.db";
+export const path = "./src/server/config/database.db";
 
 export async function CheckDatabase(): Promise<boolean> {
   if (!fs.existsSync(path)) {

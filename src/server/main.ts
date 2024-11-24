@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import ViteExpress from "vite-express";
 import { CheckDatabase, InitializeDb } from "./config/configDb.js";
 import RidesRoutes from "./routes/rides.js";
 import ValidateEstimate from "./middleware/validateEstimate.js";
@@ -8,7 +9,6 @@ import ValidateConfirm from "./middleware/validateConfirm.js";
 import ValidateHistory from "./middleware/validateHistory.js";
 
 const app = express();
-const port = 8080;
 dotenv.config();
 
 //Inicializando o banco de dados e o CORS
@@ -21,12 +21,10 @@ app.use(cors(), express.json());
 // Middlewares
 ValidateEstimate(app);
 ValidateConfirm(app);
-ValidateHistory(app)
+ValidateHistory(app);
 //Rotas
 RidesRoutes(app);
 
-app.listen(port, () => {
-  console.log(`Projeto rodando em http://localhost:${port}/`);
-});
-
-export default app;
+ViteExpress.listen(app, 8080, () =>
+  console.log("Server is listening on port 8080...")
+);
