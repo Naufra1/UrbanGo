@@ -1,42 +1,132 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.navigation-bar {
+  /* width: 10%; */
+  height: 100%;
+  flex-grow: 1;
+
+  background-color: #c2c3c0;
+}
+
+.navigation-invisible-bar {
+  width: 100%;
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  width: 150px;
+  height: 150px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.navigation-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.navigation-button {
+  width: 100%;
+  height: 3em;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.5em;
+
+  background-color: black;
+  color: white;
 }
 
-.card {
-  padding: 2em;
+.navigation-button:hover {
+  background-color: gray;
 }
 
-.read-the-docs {
-  color: #888;
+.navigation-button.active {
+  background-color: grey;
+  color: white;
+}
+
+.main-content {
+  display: flex;
+  flex-grow: 20;
+  padding: 5em;
+  margin-top: 5em;
+  margin-inline: 2em;
+}
+
+.input-div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.label-input {
+  font-size: 20px;
+}
+
+.input {
+  height: 30px;
+  width: 100%;
+  font-size: 15px;
+  padding: 10px;
+}
+
+.input:focus {
+  outline: 2px solid black;
+}
+
+.viagem-div {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  gap: 2em;
+}
+
+.viagem-user {
+  width: 30%;
+}
+
+.viagem-endereço {
+  display: flex;
+  gap: 5em;
+}
+
+.viagem-origem {
+  flex-grow: 1;
+}
+
+.viagem-destino {
+  flex-grow: 1;
+}
+
+.button-div {
+  height: 3em;
+  width: 20%;
+  margin-top: 2em;
+}
+
+.button {
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+
+  text-align: center;
+  background-color: black;
+  font-size: 20px;
+  color: white;
+  border-radius: 0;
+  border: 0px;
+}
+
+.button:hover {
+  background-color: gray;
 }
