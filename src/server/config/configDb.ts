@@ -12,7 +12,7 @@ type MotoristaType = {
   km: number;
 };
 
-const path = "./src/config/database.db";
+export const path = "./src/server/config/database.db";
 
 export async function CheckDatabase(): Promise<boolean> {
   if (!fs.existsSync(path)) {
@@ -92,7 +92,7 @@ export function InitializeDb() {
     //   id INTEGER PRIMARY KEY AUTOINCREMENT,
     //   name STRING
     // )`);
-    // db.run(`INSERT INTO user (name) VALUES (?)`, "Gustavo");
+    // db.run(`INSERT INTO user (name) VALUES (?)`, "Nome");
 
     db.run(`CREATE TABLE IF NOT EXISTS driver (
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

@@ -8,7 +8,6 @@ import ValidateConfirm from "./middleware/validateConfirm.js";
 import ValidateHistory from "./middleware/validateHistory.js";
 
 const app = express();
-const port = 8080;
 dotenv.config();
 
 //Inicializando o banco de dados e o CORS
@@ -21,12 +20,8 @@ app.use(cors(), express.json());
 // Middlewares
 ValidateEstimate(app);
 ValidateConfirm(app);
-ValidateHistory(app)
+ValidateHistory(app);
 //Rotas
 RidesRoutes(app);
 
-app.listen(port, () => {
-  console.log(`Projeto rodando em http://localhost:${port}/`);
-});
-
-export default app;
+app.listen(8080, () => console.log("Rodando na porta 8080..."));

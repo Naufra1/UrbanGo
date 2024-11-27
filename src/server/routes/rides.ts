@@ -117,7 +117,7 @@ export default function RidesRoutes(app: any) {
       const distance = respRoutesApi?.data.routes[0].distanceMeters / 1000;
       const responseData = await Estimate(distance);
 
-      const drivers = responseData.map((driver) => {
+      const drivers = responseData.map((driver: any) => {
         return {
           id: driver.id,
           name: driver.name,
@@ -131,7 +131,7 @@ export default function RidesRoutes(app: any) {
         };
       });
 
-      const sortedDrivers = drivers.sort((a, b) => a.value - b.value);
+      const sortedDrivers = drivers.sort((a: any, b: any) => a.value - b.value);
 
       const responseJson: EstimateResponseType = {
         origin: {
@@ -202,7 +202,7 @@ export default function RidesRoutes(app: any) {
         });
       }
 
-      const ridesHistory = historyData.map((history) => {
+      const ridesHistory = historyData.map((history: any) => {
         return {
           id: history.id,
           date: history.date,

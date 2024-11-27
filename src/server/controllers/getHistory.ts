@@ -1,7 +1,6 @@
 import { open } from "sqlite";
 import sqlite3 from "sqlite3";
-
-const path = "./src/config/database.db";
+import { path } from "../config/configDb.js";
 
 export async function getHistory(customer_id: string, driver_id: number) {
   try {
