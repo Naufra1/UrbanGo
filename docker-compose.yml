@@ -19,6 +19,9 @@ services:
   frontend:
     image: node:latest
     container_name: urbango-frontend
+    env_file: .env
+    environment:
+      - GOOGLE_API_KEY=$GOOGLE_API_KEY
     ports:
       - 80:80
     volumes:

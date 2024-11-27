@@ -92,7 +92,7 @@ export function InitializeDb() {
     //   id INTEGER PRIMARY KEY AUTOINCREMENT,
     //   name STRING
     // )`);
-    // db.run(`INSERT INTO user (name) VALUES (?)`, "Gustavo");
+    // db.run(`INSERT INTO user (name) VALUES (?)`, "Nome");
 
     db.run(`CREATE TABLE IF NOT EXISTS driver (
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

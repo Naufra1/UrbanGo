@@ -41,6 +41,8 @@ type ViagemContextType = {
       value: number;
     }>
   >;
+  information: boolean;
+  setInformation: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const defaultContext: ViagemContextType = {
@@ -65,6 +67,8 @@ const defaultContext: ViagemContextType = {
     value: 0,
   },
   setViagem: () => {},
+  information: false,
+  setInformation: () => {},
 };
 
 export const ViagemContext = createContext<ViagemContextType>(defaultContext);
@@ -95,10 +99,18 @@ export function ViagemProvider({ children }: any) {
     },
     value: 0,
   });
+  const [information, setInformation] = useState(false);
 
   return (
     <ViagemContext.Provider
-      value={{ estimateDriver, setEstimateDriver, viagem, setViagem }}
+      value={{
+        estimateDriver,
+        setEstimateDriver,
+        viagem,
+        setViagem,
+        information,
+        setInformation,
+      }}
     >
       {children}
     </ViagemContext.Provider>

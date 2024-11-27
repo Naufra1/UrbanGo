@@ -1,24 +1,43 @@
+import { TextField } from "@mui/material";
+
 type InputType = {
   name: string;
   placeholder: string;
   valor?: string;
-  handleOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleOnChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  disable?: boolean;
+  className?: string;
 };
 
-export default function Input({ name, placeholder, valor, handleOnChange }: InputType) {
+export default function Input({
+  name,
+  placeholder,
+  valor,
+  handleOnChange,
+  disable,
+  className,
+}: InputType) {
   return (
-    <div className="input-div">
-      <label htmlFor={name} className="label-input">
-        {name}
-      </label>
-      <input
-        type="text"
-        id={name}
-        className="input"
-        placeholder={placeholder}
-        value={valor}
-        onChange={handleOnChange}
-      />
-    </div>
+    <TextField
+      disabled={disable}
+      required
+      id={name}
+      label={name}
+      className={`input ${className}`}
+      placeholder={placeholder}
+      value={valor}
+      onChange={handleOnChange}
+      sx={{
+        "& .MuiOutlinedInput-root": {
+          "&.Mui-focused fieldset": {
+            borderColor: "black",
+            color: "black"
+          },
+        },
+        "& .MuiInputLabel-root": {
+          color: "black",
+        },
+      }}
+    />
   );
 }

@@ -4,6 +4,7 @@ import Input from "../components/input";
 import axios from "axios";
 import { ViagemContext } from "../context/viagemContext";
 import { useNavigate } from "react-router-dom";
+import ErrorModal from "../components/errorClientMsg";
 
 export default function Viagem() {
   const { setEstimateDriver, setViagem, estimateDriver, viagem } =
@@ -14,26 +15,52 @@ export default function Viagem() {
     origin: "",
     destination: "",
   });
+  const [error, setError] = useState({
+    error_code: "",
+    error_description: "",
+  });
+  const [modalOpen, setModalOpen] = useState(false);
+  const { information, setInformation } = useContext(ViagemContext);
 
-  function HandleOnClick() {
+  if (information) {
+    setInformation(false);
+  }
+
+  async function HandleOnClick() {
     try {
-      axios
-        .post("http://localhost:8080/ride/estimate", estimate)
-        .then((resp) => {
-          console.log("DATA: ", resp.data);
-          const drivers = resp.data.options;
-          setEstimateDriver(drivers);
+      const resp = await axios.post(
+        "http://localhost:8080/ride/estimate",
+        estimate
+      );
 
-          setViagem((prevViagem) => ({
-            ...prevViagem,
-            customer_id: estimate.customer_id,
-            origin: estimate.origin,
-            destination: estimate.destination,
-          }));
-          navigate("/confirmar");
+      const drivers = resp.data.options;
+      setEstimateDriver(drivers);
+
+      const updateViagem = {
+        ...viagem,
+        customer_id: estimate.customer_id,
+        origin: estimate.origin,
+        destination: estimate.destination,
+        distance: resp.data.distance,
+        duration: resp.data.duration,
+      };
+
+      setViagem(updateViagem);
+
+      navigate("/confirmar");
+    } catch (error: any) {
+      if (error.response) {
+        setModalOpen(true);
+        setError({
+          error_code: error.response.data.error_code,
+          error_description: error.response.data.error_description,
         });
-    } catch (error) {
-      console.log(error);
+        console.log(error.response.data);
+      } else if (error.request) {
+        console.log("Nenhuma resposta recebida:", error.request);
+      } else {
+        console.log("Erro ao configurar a requisição:", error.message);
+      }
     }
   }
 
@@ -58,27 +85,32 @@ export default function Viagem() {
 
   return (
     <div className="viagem-div">
+      <ErrorModal
+        error_code={error.error_code}
+        error_description={error.error_description}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+      />
       <h1>Faça a sua viagem</h1>
       <div className="viagem-customer_id">
         <Input
-          name={"Usuário:"}
-          placeholder="Gustavo"
+          name={"Usuário"}
+          placeholder="Ex: Nome, Email, Número ou Cpf"
           handleOnChange={HandleUserChange}
         />
       </div>
-
       <div className="viagem-endereço">
         <div className="viagem-origem">
           <Input
-            name={"Endereço de origem:"}
-            placeholder="Centro, Rio de Janeiro - RJ, Brasil"
+            name={"Endereço de origem"}
+            placeholder="Ex: Centro, Rio de Janeiro - RJ, Brasil"
             handleOnChange={HandleOriginChange}
           />
         </div>
         <div className="viagem-destino">
           <Input
-            name={"Endereço de destino:"}
-            placeholder="Madureira, Rio de Janeiro - RJ, Brasil"
+            name={"Endereço de destino"}
+            placeholder="Ex: Madureira, Rio de Janeiro - RJ, Brasil"
             handleOnChange={HandleDestinationChange}
           />
         </div>
