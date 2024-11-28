@@ -11,7 +11,21 @@ Instale o projeto com npm:
 ```bash
   npm install ou npm i
 ```
-Ou use o docker: 
+
+## Rodar
+
+Rode o backend do projeto com npm:
+
+```bash
+  npm run dev
+```
+E para o frontend:
+
+```bash
+  npm run dev:client
+```
+Ou use o docker para rodar o projeto todo: 
+
 ```bash
   docker compose up
 ```
